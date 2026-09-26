@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdusWeb — Login</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 30px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #4a3f9f;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: opacity 0.2s, transform 0.1s;
+            font-family: inherit;
+        }
+
+        button:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+        button:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        #mesaj {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+            display: none;
+        }
+
+        #mesaj.eroare {
+            display: block;
+            background: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+
+        #mesaj.succes {
+            display: block;
+            background: #efe;
+            color: #2a7;
+            border: 1px solid #cfc;
+            text-align: center;
+        }
+
+        #mesaj.avertizare {
+            display: block;
+            background: #ffeaa7;
+            color: #856404;
+            border: 1px solid #ffd93d;
+        }
+
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="logo">📚 EdusWeb</div>
+        <div class="subtitle">Platformă educațională</div>
+
+        <label for="username">Utilizator</label>
+        <input id="username" type="text" placeholder="ex: elev1" autocomplete="username" />
+
+        <label for="password">Parolă</label>
+        <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+
+        <button id="btnLogin" onclick="login()">Intră în cont</button>
+
+        <div id="mesaj"></div>
+
+        <div class="footer">© 2026 EdusWeb</div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  CONFIGURARE
+        // ============================================================
+        // Local: lasă gol ('')
+        // GitHub Pages: pune URL-ul serverului (ex: 'https://karma-....ngrok-free.dev')
+        const SERVER_URL = '';
+
+        // ============================================================
+        //  LOGIN
+        // ============================================================
+        async function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const mesaj = document.getElementById('mesaj');
+            const btn = document.getElementById('btnLogin');
+
+            if (!username || !password) {
+                mesaj.className = 'eroare';
+                mesaj.textContent = 'Completează utilizator și parolă.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Se verifică...';
+            mesaj.className = '';
+            mesaj.textContent = '';
+
+            try {
+                const url = `${SERVER_URL}/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (data.ok) {
+                    afiseazaSucces(data, username);
+                } else {
+                    mesaj.className = 'eroare';
+                    mesaj.textContent = data.eroare || 'Eroare la login';
+                }
+            } catch (err) {
+                mesaj.className = 'eroare';
+                mesaj.textContent = 'Serverul nu răspunde. E pornit?';
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Intră în cont';
+            }
+        }
+
+        // ============================================================
+        //  AFIȘARE REZULTAT + REDIRECȚIONARE
+        // ============================================================
+        function afiseazaSucces(data, username) {
+            // Salvăm userul în localStorage pentru dashboard
+            localStorage.setItem('edusweb_user', JSON.stringify({
+                id: data.id,
+                username: username,
+                nume: data.nume,
+                rol: data.rol,
+                scoala: data.scoala,
+                clasa: data.clasa,
+                permisiuni: data.permisiuni,
+                dispozitiv_nou: data.dispozitiv_nou,
+                prima_logare: data.prima_logare
+            }));
+
+            const mesaj = document.getElementById('mesaj');
+            mesaj.className = 'succes';
+            mesaj.innerHTML = `
+        Bun venit, <b>${escapeHtml(data.nume)}</b>!<br>
+        Se încarcă meniul...
+      `;
+
+            // Redirecționăm către dashboard după 0.8s
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 800);
+        }
+
+        function escapeHtml(s) {
+            if (!s) return '';
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // ============================================================
+        //  ENTER = LOGIN
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+
+</html>
