@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdusWeb — Exerciții</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f0f2f8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            padding: 20px 24px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .header-info h1 {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .header-info p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+
+        .btn-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-toggle.activ {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .streak-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .streak-badge .val {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .streak-badge .lbl {
+            font-size: 10px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        /* MOD 1: una câte una */
+        .ex-card {
+            background: white;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .ex-numar {
+            font-size: 12px;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .ex-intrebare {
+            font-size: 18px;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .variante {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .varianta {
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            font-family: inherit;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .varianta:hover:not(:disabled) {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .varianta:disabled {
+            cursor: default;
+        }
+
+        .varianta.selectata {
+            border-color: #667eea;
+            background: #eef0ff;
+            font-weight: 600;
+        }
+
+        .varianta.corecta {
+            border-color: #2ecc71;
+            background: #e8f8ee;
+            font-weight: 600;
+        }
+
+        .varianta.gresita {
+            border-color: #e74c3c;
+            background: #fee;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-actiune {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: inherit;
+            transition: opacity 0.2s;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-actiune:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        .btn-actiune.urmator {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        .feedback {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 15px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .feedback.corect {
+            background: #e8f8ee;
+            color: #155724;
+            display: block;
+            border-left: 4px solid #2ecc71;
+        }
+
+        .feedback.gresit {
+            background: #fee;
+            color: #721c24;
+            display: block;
+            border-left: 4px solid #e74c3c;
+        }
+
+        /* MOD 2: grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .patrat {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 10px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .patrat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+        }
+
+        .patrat-numar {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #667eea;
+        }
+
+        .patrat-status {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .patrat-status.nefacut {
+            color: #999;
+        }
+
+        .patrat-status.corect {
+            color: #2ecc71;
+        }
+
+        .patrat-status.gresit {
+            color: #e74c3c;
+        }
+
+        .patrat.corect {
+            border-color: #2ecc71;
+            background: #f0fdf4;
+        }
+
+        .patrat.gresit {
+            border-color: #e74c3c;
+            background: #fef2f2;
+        }
+
+        .patrat-icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        /* Modal refacere */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.activ {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal h2 {
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-actiuni {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-modal.primary {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-modal.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-info">
+                <h1>📝 Exerciții</h1>
+                <p id="subtitlu">Se încarcă...</p>
+            </div>
+            <div class="header-actions">
+                <div class="streak-badge">
+                    <div class="val" id="streak-val">0</div>
+                    <div class="lbl">🔥 streak</div>
+                </div>
+                <button class="btn-toggle" id="btn-toggle" onclick="toggleVizualizare()">
+                    📋 Vezi toate
+                </button>
+            </div>
+        </div>
+        <div id="exercitii-container">
+            <p style="text-align:center;color:#888;padding:40px;">Se încarcă...</p>
+        </div>
+    </div>
+
+    <!-- Modal refacere întrebare -->
+    <div class="modal-overlay" id="modal-refacere">
+        <div class="modal">
+            <h2>Vrei să refaci această întrebare?</h2>
+            <p id="modal-refacere-text">Întrebarea curentă va fi ștearsă din rezultate.</p>
+            <div class="modal-actiuni">
+                <button class="btn-modal secondary" onclick="inchideModalRefacere()">Anulează</button>
+                <button class="btn-modal primary" onclick="confirmaRefacere()">Refă</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userJson = localStorage.getItem('edusweb_user');
+        if (!userJson) window.location.href = '/';
+        const user = JSON.parse(userJson);
+
+        let toateExercitiile = [];
+        let indexCurent = 0;
+        let raspunsuri = {};       // { idEx: { raspuns, corect } }
+        let raspunsSelectat = null;
+        let feedbackAfisat = false;
+        let modGrid = false;
+        let indexRefacere = null;
+
+        const params = new URLSearchParams(window.location.search);
+        const dificultate = params.get('dificultate');
+        const cale = window.location.pathname;
+        const matchLectie = cale.match(/\/lectii\/(\d+)/);
+        const saptamana = matchLectie ? parseInt(matchLectie[1]) : null;
+        const esteLectie = saptamana !== null;
+
+        // ============================================================
+        //  ÎNCĂRCARE
+        // ============================================================
+        async function incarca() {
+            const container = document.getElementById('exercitii-container');
+            try {
+                let url;
+                if (esteLectie) {
+                    url = `/api/exercitii?userId=${user.id}&saptamana=${saptamana}&dificultate=${dificultate}`;
+                } else {
+                    url = `/api/exercitii-zilnice?userId=${user.id}`;
+                }
+                const res = await fetch(url);
+                const data = await res.json();
+                if (!data.ok) throw new Error(data.eroare);
+
+                if (!data.exercitii || data.exercitii.length === 0) {
+                    container.innerHTML = `<div style="text-align:center;padding:40px;color:#888;"><p style="font-size:48px;">📭</p><p>Nu sunt exerciții.</p></div>`;
+                    return;
+                }
+
+                toateExercitiile = data.exercitii;
+                document.getElementById('subtitlu').textContent = data.lectie || 'Exerciții zilnice';
+                document.getElementById('streak-val').textContent = data.streak || 0;
+
+                afiseazaExercitiu();
+
+            } catch (err) {
+                container.innerHTML = `<p style="color:#e74c3c;text-align:center;padding:40px;">Eroare: ${err.message}</p>`;
+            }
+        }
+
+        // ============================================================
+        //  TOGGLE MOD
+        // ============================================================
+        function toggleVizualizare() {
+            modGrid = !modGrid;
+            const btn = document.getElementById('btn-toggle');
+            btn.textContent = modGrid ? '📝 Vezi una câte una' : '📋 Vezi toate';
+            btn.classList.toggle('activ', modGrid);
+
+            if (modGrid) {
+                afiseazaGrid();
+            } else {
+                afiseazaExercitiu();
+            }
+        }
+
+        // ============================================================
+        //  MOD 1: UNA CÂTE UNA
+        // ============================================================
+        function afiseazaExercitiu() {
+            feedbackAfisat = false;
+            raspunsSelectat = null;
+            const ex = toateExercitiile[indexCurent];
+            const container = document.getElementById('exercitii-container');
+            container.innerHTML = '';
+
+            const card = document.createElement('div');
+            card.className = 'ex-card';
+
+            card.innerHTML = `
+        <div class="ex-numar">Exercițiul ${indexCurent + 1} din ${toateExercitiile.length}</div>
+        <div class="ex-intrebare">${ex.intrebare}</div>
+      `;
+
+            // Dacă a fost deja răspuns, arată-l
+            const raspunsExistent = raspunsuri[ex.id];
+
+            if (ex.tip === 'multiple_choice') {
+                const varianteDiv = document.createElement('div');
+                varianteDiv.className = 'variante';
+                const toateVariantele = amesteca([ex.raspuns_corect, ...(ex.variante_gresite || [])]);
+
+                toateVariantele.forEach(v => {
+                    const btn = document.createElement('button');
+                    btn.className = 'varianta';
+                    btn.textContent = v;
+
+                    if (raspunsExistent) {
+                        btn.disabled = true;
+                        if (v === ex.raspuns_corect) btn.classList.add('corecta');
+                        else if (v === raspunsExistent.raspuns) btn.classList.add('gresita');
+                    } else {
+                        btn.onclick = () => {
+                            if (feedbackAfisat) return;
+                            varianteDiv.querySelectorAll('.varianta').forEach(b => b.classList.remove('selectata'));
+                            btn.classList.add('selectata');
+                            raspunsSelectat = v;
+                            verificaRaspuns();
+                        };
+                    }
+                    varianteDiv.appendChild(btn);
+                });
+                card.appendChild(varianteDiv);
+            } else {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = 'Scrie răspunsul aici...';
+                input.id = 'input-raspuns';
+
+                if (raspunsExistent) {
+                    input.value = raspunsExistent.raspuns;
+                    input.disabled = true;
+                } else {
+                    input.oninput = (e) => { raspunsSelectat = e.target.value; };
+                }
+                card.appendChild(input);
+
+                if (!raspunsExistent) {
+                    const btnVerifica = document.createElement('button');
+                    btnVerifica.className = 'btn-actiune';
+                    btnVerifica.textContent = 'Verifică răspunsul';
+                    btnVerifica.onclick = verificaRaspuns;
+                    card.appendChild(btnVerifica);
+                }
+            }
+
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback';
+            feedback.id = 'feedback-box';
+            card.appendChild(feedback);
+
+            // Dacă avem deja răspuns, arată feedback-ul
+            if (raspunsExistent) {
+                const fb = feedback;
+                if (raspunsExistent.corect) {
+                    fb.className = 'feedback corect';
+                    fb.textContent = '✅ Corect!';
+                } else {
+                    fb.className = 'feedback gresit';
+                    fb.textContent = `❌ Greșit. Răspuns corect: ${ex.raspuns_corect}`;
+                }
+                feedbackAfisat = true;
+
+                // Adaugă buton refacere + următorul
+                const actiuniDiv = document.createElement('div');
+                actiuniDiv.style.display = 'flex';
+                actiuniDiv.style.gap = '10px';
+                actiuniDiv.style.marginTop = '20px';
+
+                const btnRefacere = document.createElement('button');
+                btnRefacere.className = 'btn-actiune';
+                btnRefacere.style.background = '#f39c12';
+                btnRefacere.style.marginTop = '0';
+                btnRefacere.textContent = '🔁 Refă';
+                btnRefacere.onclick = () => deschideModalRefacere(indexCurent);
+                actiuniDiv.appendChild(btnRefacere);
+
+                const btnUrmator = document.createElement('button');
+                btnUrmator.className = 'btn-actiune urmator';
+                btnUrmator.style.marginTop = '0';
+                btnUrmator.textContent = (indexCurent === toateExercitiile.length - 1) ? 'Vezi rezultat final' : 'Următorul →';
+                btnUrmator.onclick = urmatorulExercitiu;
+                actiuniDiv.appendChild(btnUrmator);
+
+                card.appendChild(actiuniDiv);
+            }
+
+            container.appendChild(card);
+        }
+
+        async function verificaRaspuns() {
+            if (feedbackAfisat || !raspunsSelectat) return;
+            feedbackAfisat = true;
+
+            const ex = toateExercitiile[indexCurent];
+            const feedbackBox = document.getElementById('feedback-box');
+
+            try {
+                const res = await fetch('/api/exercitii/verifica', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ exercitiu: ex, raspuns: raspunsSelectat })
+                });
+                const data = await res.json();
+                if (!data.ok) throw new Error(data.eroare);
+
+                const corect = data.corect;
+                raspunsuri[ex.id] = { raspuns: raspunsSelectat, corect };
+
+                if (corect) {
+                    feedbackBox.className = 'feedback corect';
+                    feedbackBox.textContent = '✅ Corect!';
+                } else {
+                    feedbackBox.className = 'feedback gresit';
+                    feedbackBox.textContent = `❌ Greșit. Răspuns corect: ${ex.raspuns_corect}`;
+                }
+
+                // Marchează variantele MC
+                if (ex.tip === 'multiple_choice') {
+                    document.querySelectorAll('.varianta').forEach(b => {
+                        b.disabled = true;
+                        if (b.textContent === ex.raspuns_corect) b.classList.add('corecta');
+                        else if (b.classList.contains('selectata')) b.classList.add('gresita');
+                    });
+                }
+
+                // Adaugă butoane refacere + următorul
+                const card = document.querySelector('.ex-card');
+                let actiuniDiv = card.querySelector('.actiuni-verificare');
+                if (!actiuniDiv) {
+                    actiuniDiv = document.createElement('div');
+                    actiuniDiv.className = 'actiuni-verificare';
+                    actiuniDiv.style.display = 'flex';
+                    actiuniDiv.style.gap = '10px';
+                    actiuniDiv.style.marginTop = '20px';
+                    card.appendChild(actiuniDiv);
+                }
+                actiuniDiv.innerHTML = '';
+
+                const btnRefacere = document.createElement('button');
+                btnRefacere.className = 'btn-actiune';
+                btnRefacere.style.background = '#f39c12';
+                btnRefacere.style.marginTop = '0';
+                btnRefacere.textContent = '🔁 Refă';
+                btnRefacere.onclick = () => deschideModalRefacere(indexCurent);
+                actiuniDiv.appendChild(btnRefacere);
+
+                const btnUrmator = document.createElement('button');
+                btnUrmator.className = 'btn-actiune urmator';
+                btnUrmator.style.marginTop = '0';
+                btnUrmator.textContent = (indexCurent === toateExercitiile.length - 1) ? 'Vezi rezultat final' : 'Următorul →';
+                btnUrmator.onclick = urmatorulExercitiu;
+                actiuniDiv.appendChild(btnUrmator);
+
+            } catch (err) {
+                feedbackBox.className = 'feedback gresit';
+                feedbackBox.textContent = `Eroare la verificare: ${err.message}`;
+            }
+        }
+
+        function urmatorulExercitiu() {
+            feedbackAfisat = false;
+            indexCurent++;
+            if (indexCurent < toateExercitiile.length) {
+                afiseazaExercitiu();
+            } else {
+                finalizeaza();
+            }
+        }
+
+        // ============================================================
+        //  MOD 2: GRID
+        // ============================================================
+        function afiseazaGrid() {
+            const container = document.getElementById('exercitii-container');
+            container.innerHTML = '';
+
+            const info = document.createElement('div');
+            info.style.marginBottom = '16px';
+            info.style.padding = '14px';
+            info.style.background = '#fff';
+            info.style.borderRadius = '10px';
+            info.style.fontSize = '14px';
+            info.style.color = '#666';
+
+            const corecte = Object.values(raspunsuri).filter(r => r.corect).length;
+            const gresite = Object.values(raspunsuri).filter(r => !r.corect).length;
+            const nefacute = toateExercitiile.length - Object.keys(raspunsuri).length;
+
+            info.innerHTML = `
+        <strong>📊 Progres:</strong>
+        <span style="color:#2ecc71;">${corecte} corecte</span> ·
+        <span style="color:#e74c3c;">${gresite} greșite</span> ·
+        <span style="color:#999;">${nefacute} nefăcute</span>
+      `;
+            container.appendChild(info);
+
+            const grid = document.createElement('div');
+            grid.className = 'grid-container';
+
+            toateExercitiile.forEach((ex, i) => {
+                const rasp = raspunsuri[ex.id];
+                const patrat = document.createElement('div');
+                patrat.className = 'patrat';
+                patrat.onclick = () => {
+                    if (rasp) {
+                        deschideModalRefacere(i);
+                    } else {
+                        // Sari la întrebarea respectivă în modul normal
+                        indexCurent = i;
+                        modGrid = false;
+                        document.getElementById('btn-toggle').textContent = '📋 Vezi toate';
+                        document.getElementById('btn-toggle').classList.remove('activ');
+                        afiseazaExercitiu();
+                    }
+                };
+
+                let icon = '⏳';
+                let statusText = 'Nefăcut';
+                let statusClass = 'nefacut';
+
+                if (rasp) {
+                    if (rasp.corect) {
+                        icon = '✅';
+                        statusText = 'Corect';
+                        statusClass = 'corect';
+                        patrat.classList.add('corect');
+                    } else {
+                        icon = '❌';
+                        statusText = 'Greșit';
+                        statusClass = 'gresit';
+                        patrat.classList.add('gresit');
+                    }
+                }
+
+                patrat.innerHTML = `
+          <div class="patrat-icon">${icon}</div>
+          <div class="patrat-numar">#${i + 1}</div>
+          <div class="patrat-status ${statusClass}">${statusText}</div>
+        `;
+
+                grid.appendChild(patrat);
+            });
+
+            container.appendChild(grid);
+
+            // Dacă toate sunt făcute, adaugă buton finalizare
+            if (Object.keys(raspunsuri).length === toateExercitiile.length) {
+                const btnFinal = document.createElement('button');
+                btnFinal.className = 'btn-actiune urmator';
+                btnFinal.textContent = '📊 Vezi rezultat final';
+                btnFinal.onclick = finalizeaza;
+                container.appendChild(btnFinal);
+            }
+        }
+
+        // ============================================================
+        //  MODAL REFACERE
+        // ============================================================
+        function deschideModalRefacere(index) {
+            indexRefacere = index;
+            const ex = toateExercitiile[index];
+            document.getElementById('modal-refacere-text').textContent =
+                `Întrebarea #${index + 1}: ${ex.intrebare.substring(0, 100)}${ex.intrebare.length > 100 ? '...' : ''}`;
+            document.getElementById('modal-refacere').classList.add('activ');
+        }
+
+        function inchideModalRefacere() {
+            document.getElementById('modal-refacere').classList.remove('activ');
+            indexRefacere = null;
+        }
+
+        function confirmaRefacere() {
+            if (indexRefacere === null) return;
+            const ex = toateExercitiile[indexRefacere];
+            delete raspunsuri[ex.id];
+
+            inchideModalRefacere();
+
+            if (modGrid) {
+                afiseazaGrid();
+            } else {
+                indexCurent = indexRefacere;
+                afiseazaExercitiu();
+            }
+        }
+
+        // ============================================================
+        //  FINALIZARE
+        // ============================================================
+        async function finalizeaza() {
+            const container = document.getElementById('exercitii-container');
+
+            let corecte = 0;
+            for (const id in raspunsuri) {
+                if (raspunsuri[id].corect) corecte++;
+            }
+            const total = toateExercitiile.length;
+            const procent = Math.round((corecte / total) * 100);
+
+            // Trimite rezultatele finale
+            try {
+                if (esteLectie) {
+                    await fetch('/api/exercitii/finalizeaza', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userId: user.id,
+                            saptamana: saptamana,
+                            dificultate: dificultate,
+                            corecte: corecte,
+                            total: total
+                        })
+                    });
+                } else {
+                    await fetch('/api/exercitii/trimite', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userId: user.id,
+                            raspunsuri: Object.fromEntries(
+                                Object.entries(raspunsuri).map(([k, v]) => [k, v.raspuns])
+                            )
+                        })
+                    });
+                }
+            } catch (err) {
+                console.error('Eroare salvare:', err);
+            }
+
+            // Reîncarcă streak-ul
+            if (!esteLectie) {
+                try {
+                    const res = await fetch(`/api/exercitii-zilnice?userId=${user.id}`);
+                    const data = await res.json();
+                    if (data.ok) document.getElementById('streak-val').textContent = data.streak;
+                } catch (err) { }
+            }
+
+            const culoareProcent = procent >= 70 ? '#2ecc71' : procent >= 40 ? '#f39c12' : '#e74c3c';
+
+            container.innerHTML = `
+        <div class="ex-card" style="text-align:center;">
+          <div style="font-size:64px; margin-bottom:10px;">${procent >= 70 ? '🎉' : procent >= 40 ? '👍' : '💪'}</div>
+          <h2>Ai terminat!</h2>
+          <p style="font-size:32px; font-weight:700; margin:20px 0; color:${culoareProcent};">
+            ${corecte}/${total} (${procent}%)
+          </p>
+          <div style="display:flex; gap:10px; margin-top:20px;">
+            <a href="${esteLectie ? '/materie/romana/lectii' : '/materie/romana'}"
+               class="btn-actiune" style="text-decoration:none; display:block; text-align:center; margin-top:0;">
+              ← Înapoi
+            </a>
+            <button class="btn-actiune urmator" style="margin-top:0;" onclick="location.reload()">
+              🔁 Reia
+            </button>
+          </div>
+        </div>
+      `;
+        }
+
+        // ============================================================
+        //  UTILITARE
+        // ============================================================
+        function amesteca(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        incarca();
+    </script>
+</body>
+
+</html>

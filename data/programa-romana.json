@@ -1,0 +1,342 @@
+{
+    "saptamani": [
+        {
+            "saptamana": 1,
+            "lectie": "Recapitulare clasa a VII-a",
+            "concepte": [
+                "parte_vorbire",
+                "mod_timp",
+                "gen_numar",
+                "figuri_stil_baza"
+            ]
+        },
+        {
+            "saptamana": 2,
+            "lectie": "Textul epic",
+            "concepte": [
+                "text_epic",
+                "personaje",
+                "actiune",
+                "narator",
+                "figuri_stil_baza"
+            ]
+        },
+        {
+            "saptamana": 3,
+            "lectie": "Textul liric",
+            "concepte": [
+                "strofă",
+                "vers",
+                "rimă",
+                "măsură",
+                "ritm",
+                "vers_liber",
+                "figuri_stil_poezie"
+            ]
+        },
+        {
+            "saptamana": 4,
+            "lectie": "Textul dramatic",
+            "concepte": [
+                "text_dramatic",
+                "dialog",
+                "monolog",
+                "personaj_dramatic",
+                "didascalii"
+            ]
+        },
+        {
+            "saptamana": 5,
+            "lectie": "Predicatul",
+            "concepte": [
+                "predicat_verbal",
+                "predicat_nominal",
+                "verb_copulativ",
+                "acord_predicat"
+            ]
+        },
+        {
+            "saptamana": 6,
+            "lectie": "Construcții active și pasive",
+            "concepte": [
+                "diateza_activa",
+                "diateza_pasiva",
+                "verbul_a_fi",
+                "constructii_pasive"
+            ]
+        },
+        {
+            "saptamana": 7,
+            "lectie": "Construcții cu pronume reflexive",
+            "concepte": [
+                "pronume_reflexive",
+                "verbe_reflexive",
+                "constructii_reflexive"
+            ]
+        },
+        {
+            "saptamana": 8,
+            "lectie": "Construcții impersonale",
+            "concepte": [
+                "constructii_impersonale",
+                "verbe_impersonale"
+            ]
+        },
+        {
+            "saptamana": 9,
+            "lectie": "Subiectul",
+            "concepte": [
+                "subiect_simplu",
+                "subiect_multiplu",
+                "subiect_compus",
+                "acord_subiect"
+            ]
+        },
+        {
+            "saptamana": 10,
+            "lectie": "Atributul",
+            "concepte": [
+                "atribut_adjectival",
+                "atribut_substantival",
+                "atribut_pronominal",
+                "atribut_verbal",
+                "atribut_genitival"
+            ]
+        },
+        {
+            "saptamana": 11,
+            "lectie": "Apoziția",
+            "concepte": [
+                "apozitie",
+                "apozitie_simpla",
+                "apozitie_compusa"
+            ]
+        },
+        {
+            "saptamana": 12,
+            "lectie": "Fraza. Coordonarea",
+            "concepte": [
+                "fraza",
+                "propozitie_principala",
+                "propozitie_secundara",
+                "coordonare",
+                "conjunctii_coordonatoare"
+            ]
+        },
+        {
+            "saptamana": 13,
+            "lectie": "Subordonarea",
+            "concepte": [
+                "subordonare",
+                "element_regent",
+                "element_introductiv",
+                "conjunctii_subordonatoare"
+            ]
+        },
+        {
+            "saptamana": 14,
+            "lectie": "Atributiva",
+            "concepte": [
+                "atributiva",
+                "pronume_relativ",
+                "adverb_relativ"
+            ]
+        },
+        {
+            "saptamana": 15,
+            "lectie": "Complementul direct",
+            "concepte": [
+                "complement_direct",
+                "acuzativ",
+                "tranzitivitate"
+            ]
+        },
+        {
+            "saptamana": 16,
+            "lectie": "Complementul indirect",
+            "concepte": [
+                "complement_indirect",
+                "dativ",
+                "acuzativ_cu_prepozitie"
+            ]
+        },
+        {
+            "saptamana": 17,
+            "lectie": "Complementele circumstanțiale",
+            "concepte": [
+                "circumstantial_loc",
+                "circumstantial_timp",
+                "circumstantial_mod",
+                "circumstantial_cauza"
+            ]
+        },
+        {
+            "saptamana": 18,
+            "lectie": "Pronumele",
+            "concepte": [
+                "pronume_personal",
+                "pronume_posesiv",
+                "pronume_demonstrativ",
+                "pronume_relativ",
+                "pronume_nehotarat"
+            ]
+        },
+        {
+            "saptamana": 19,
+            "lectie": "Numeralul",
+            "concepte": [
+                "numeral_cardinal",
+                "numeral_ordinal",
+                "numeral_fractionar",
+                "numeral_multiplicativ"
+            ]
+        },
+        {
+            "saptamana": 20,
+            "lectie": "Adverbul",
+            "concepte": [
+                "adverb_mod",
+                "adverb_timp",
+                "adverb_loc",
+                "locutiune_adverbiala"
+            ]
+        },
+        {
+            "saptamana": 21,
+            "lectie": "Vocabular — derivare",
+            "concepte": [
+                "derivare_prefix",
+                "derivare_sufix",
+                "familie_lexicala"
+            ]
+        },
+        {
+            "saptamana": 22,
+            "lectie": "Vocabular — compunere",
+            "concepte": [
+                "compunere",
+                "cuvinte_compuse"
+            ]
+        },
+        {
+            "saptamana": 23,
+            "lectie": "Figuri de stil complexe",
+            "concepte": [
+                "metafora",
+                "personificare",
+                "comparație",
+                "epitet",
+                "hiperbola",
+                "alegoria"
+            ]
+        },
+        {
+            "saptamana": 24,
+            "lectie": "Textul argumentativ",
+            "concepte": [
+                "argument",
+                "contraargument",
+                "teza",
+                "concluzie"
+            ]
+        },
+        {
+            "saptamana": 25,
+            "lectie": "Textul de opinie",
+            "concepte": [
+                "opinie",
+                "argumentare",
+                "exemplu"
+            ]
+        },
+        {
+            "saptamana": 26,
+            "lectie": "Balada populară",
+            "concepte": [
+                "balada",
+                "motiv_literar",
+                "personaj_baladesc"
+            ]
+        },
+        {
+            "saptamana": 27,
+            "lectie": "Romanul",
+            "concepte": [
+                "roman",
+                "personaj_principal",
+                "personaj_secundar",
+                "conflict"
+            ]
+        },
+        {
+            "saptamana": 28,
+            "lectie": "Recapitulare — lectură",
+            "concepte": [
+                "recapitulare_genuri",
+                "recapitulare_specii"
+            ]
+        },
+        {
+            "saptamana": 29,
+            "lectie": "Recapitulare — morfologie",
+            "concepte": [
+                "recapitulare_partea_vorbire",
+                "recapitulare_mod_timp"
+            ]
+        },
+        {
+            "saptamana": 30,
+            "lectie": "Recapitulare — sintaxă",
+            "concepte": [
+                "recapitulare_functii",
+                "recapitulare_fraza"
+            ]
+        },
+        {
+            "saptamana": 31,
+            "lectie": "Recapitulare — vocabular",
+            "concepte": [
+                "recapitulare_vocabular",
+                "recapitulare_derivare"
+            ]
+        },
+        {
+            "saptamana": 32,
+            "lectie": "Simulare EN — Subiectul I",
+            "concepte": [
+                "simulare_int elegere_text",
+                "simulare_gramatica"
+            ]
+        },
+        {
+            "saptamana": 33,
+            "lectie": "Simulare EN — Subiectul II",
+            "concepte": [
+                "simulare_compunere",
+                "simulare_argumentare"
+            ]
+        },
+        {
+            "saptamana": 34,
+            "lectie": "Simulare EN — Subiectul III",
+            "concepte": [
+                "simulare_analiza_text",
+                "simulare_gramatica_complexa"
+            ]
+        },
+        {
+            "saptamana": 35,
+            "lectie": "Recapitulare generală",
+            "concepte": [
+                "recapitulare_totala"
+            ]
+        },
+        {
+            "saptamana": 36,
+            "lectie": "Recapitulare finală",
+            "concepte": [
+                "recapitulare_totala"
+            ]
+        }
+    ]
+}

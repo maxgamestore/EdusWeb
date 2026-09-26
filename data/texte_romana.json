@@ -1,0 +1,12 @@
+{
+    "texte": [
+        {
+            "id": 1,
+            "titlu": "TITLU TEXT",
+            "autor": "AUTOR",
+            "clasa": 8,
+            "dificultate": "mediu",
+            "text": "PUNE TEXTUL AICI PE O SINGURA LINIE SAU PE MAI MULTE CU \\n"
+        }
+    ]
+}

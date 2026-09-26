@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdusWeb — Română</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f0f2f8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px 28px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left h1 {
+            font-size: 26px;
+            margin-bottom: 4px;
+        }
+
+        .header-left p {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .streak-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .streak-badge .val {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .streak-badge .lbl {
+            font-size: 10px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sectiune-titlu {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .grid-actiuni {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .card-actiune {
+            background: white;
+            border-radius: 14px;
+            padding: 30px 20px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .card-actiune:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+            border-color: #667eea;
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .card-nume {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card-info {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .card-exercitii {
+            border-top: 4px solid #2ecc71;
+        }
+
+        .card-lectii {
+            border-top: 4px solid #9b59b6;
+        }
+
+        .card-teste {
+            border-top: 4px solid #3498db;
+        }
+
+        .card-evaluare {
+            border-top: 4px solid #e74c3c;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-row {
+            margin-bottom: 14px;
+        }
+
+        .stat-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .stat-bar {
+            background: #eef0f5;
+            border-radius: 6px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s;
+        }
+
+        .stat-fill.low {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+        }
+
+        .stat-fill.medium {
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+        }
+
+        .stat-fill.high {
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header">
+            <div class="header-left">
+                <h1>📕 Română</h1>
+                <p>Alege o activitate</p>
+            </div>
+            <div class="header-right">
+                <div class="streak-badge">
+                    <div class="val" id="streak-val">0</div>
+                    <div class="lbl">🔥 streak</div>
+                </div>
+                <a href="/dashboard" class="btn-back">← Înapoi</a>
+            </div>
+        </div>
+
+        <h2 class="sectiune-titlu">📚 Activități</h2>
+        <div class="grid-actiuni">
+            <div class="card-actiune card-exercitii" onclick="deschideActiune('exercitii')">
+                <div class="card-icon">📝</div>
+                <div class="card-nume">Exerciții zilnice</div>
+                <div class="card-info">5 pe zi, din ce ești slab</div>
+            </div>
+
+            <div class="card-actiune card-lectii" onclick="deschideActiune('lectii')">
+                <div class="card-icon">📚</div>
+                <div class="card-nume">Lecții</div>
+                <div class="card-info">36 lecții — exersează oricând</div>
+            </div>
+
+            <div class="card-actiune card-teste" onclick="deschideActiune('teste')">
+                <div class="card-icon">📊</div>
+                <div class="card-nume">Teste săptămânale</div>
+                <div class="card-info">În curând</div>
+            </div>
+
+            <div class="card-actiune card-evaluare" onclick="deschideActiune('evaluare')">
+                <div class="card-icon">🎓</div>
+                <div class="card-nume">Evaluare Națională</div>
+                <div class="card-info">În curând</div>
+            </div>
+        </div>
+
+        <h2 class="sectiune-titlu">📈 Statistici</h2>
+        <div class="stat-card" id="statistici">
+            <p style="color:#888; text-align:center; padding:20px;">Se încarcă...</p>
+        </div>
+
+    </div>
+
+    <script>
+        const userJson = localStorage.getItem('edusweb_user');
+        if (!userJson) {
+            window.location.href = '/';
+        }
+        const user = JSON.parse(userJson);
+
+        // ============================================================
+        //  VERIFICĂ TESTUL INIȚIAL
+        // ============================================================
+        async function verifica() {
+            try {
+                const res = await fetch(`/statistici?userId=${user.id}&materie=romana`);
+                const data = await res.json();
+
+                if (!data.ok) {
+                    console.error('Eroare statistici:', data.eroare);
+                    return;
+                }
+
+                if (!data.aFacutTestInitial) {
+                    window.location.href = '/materie/romana/test-initial';
+                    return;
+                }
+
+                renderStatistici(data.statistici);
+                incarcaStreak();
+
+            } catch (err) {
+                console.error('Eroare:', err);
+            }
+        }
+
+        function renderStatistici(statistici) {
+            const container = document.getElementById('statistici');
+
+            if (!statistici || statistici.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; padding:20px;">Nu ai statistici încă.</p>';
+                return;
+            }
+
+            container.innerHTML = statistici.map(s => {
+                let clasa = 'low';
+                if (s.procent >= 70) clasa = 'high';
+                else if (s.procent >= 40) clasa = 'medium';
+
+                return `
+          <div class="stat-row">
+            <div class="stat-label">
+              <span>${s.nume}</span>
+              <span>${s.procent}%</span>
+            </div>
+            <div class="stat-bar">
+              <div class="stat-fill ${clasa}" style="width: ${s.procent}%"></div>
+            </div>
+          </div>
+        `;
+            }).join('');
+        }
+
+        async function incarcaStreak() {
+            try {
+                const res = await fetch(`/api/exercitii?userId=${user.id}`);
+                const data = await res.json();
+                if (data.ok) {
+                    document.getElementById('streak-val').textContent = data.streak || 0;
+                }
+            } catch (err) {
+                console.error('Eroare streak:', err);
+            }
+        }
+
+        function deschideActiune(tip) {
+            if (tip === 'exercitii') {
+                window.location.href = '/materie/romana/exercitii';
+            } else if (tip === 'lectii') {
+                window.location.href = '/materie/romana/lectii';
+            } else if (tip === 'teste') {
+                alert('Testele săptămânale — în curând!');
+            } else if (tip === 'evaluare') {
+                alert('Evaluarea Națională — în curând!');
+            }
+        }
+
+        verifica();
+    </script>
+</body>
+
+</html>

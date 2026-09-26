@@ -1,0 +1,389 @@
+{
+    "concepte": [
+        {
+            "id": "parte_vorbire",
+            "saptamana": 1,
+            "nume_complet": "Părțile de vorbire (recapitulare)"
+        },
+        {
+            "id": "mod_timp",
+            "saptamana": 1,
+            "nume_complet": "Modurile și timpurile verbului (recapitulare)"
+        },
+        {
+            "id": "gen_numar",
+            "saptamana": 1,
+            "nume_complet": "Genul și numărul substantivelor"
+        },
+        {
+            "id": "figuri_stil_baza",
+            "saptamana": 1,
+            "nume_complet": "Figuri de stil de bază"
+        },
+        {
+            "id": "text_epic",
+            "saptamana": 2,
+            "nume_complet": "Textul epic"
+        },
+        {
+            "id": "personaje",
+            "saptamana": 2,
+            "nume_complet": "Personajele într-un text epic"
+        },
+        {
+            "id": "actiune",
+            "saptamana": 2,
+            "nume_complet": "Acțiunea într-un text epic"
+        },
+        {
+            "id": "narator",
+            "saptamana": 2,
+            "nume_complet": "Naratorul"
+        },
+        {
+            "id": "strofa",
+            "saptamana": 3,
+            "nume_complet": "Strofa într-o poezie"
+        },
+        {
+            "id": "vers",
+            "saptamana": 3,
+            "nume_complet": "Versul"
+        },
+        {
+            "id": "rima",
+            "saptamana": 3,
+            "nume_complet": "Rima"
+        },
+        {
+            "id": "masura",
+            "saptamana": 3,
+            "nume_complet": "Măsura versului"
+        },
+        {
+            "id": "ritm",
+            "saptamana": 3,
+            "nume_complet": "Ritmul"
+        },
+        {
+            "id": "vers_liber",
+            "saptamana": 3,
+            "nume_complet": "Versul liber"
+        },
+        {
+            "id": "figuri_stil_poezie",
+            "saptamana": 3,
+            "nume_complet": "Figuri de stil în poezie"
+        },
+        {
+            "id": "text_dramatic",
+            "saptamana": 4,
+            "nume_complet": "Textul dramatic"
+        },
+        {
+            "id": "dialog",
+            "saptamana": 4,
+            "nume_complet": "Dialogul"
+        },
+        {
+            "id": "monolog",
+            "saptamana": 4,
+            "nume_complet": "Monologul"
+        },
+        {
+            "id": "didascalii",
+            "saptamana": 4,
+            "nume_complet": "Didascaliile"
+        },
+        {
+            "id": "predicat_verbal",
+            "saptamana": 5,
+            "nume_complet": "Predicatul verbal"
+        },
+        {
+            "id": "predicat_nominal",
+            "saptamana": 5,
+            "nume_complet": "Predicatul nominal"
+        },
+        {
+            "id": "verb_copulativ",
+            "saptamana": 5,
+            "nume_complet": "Verbele copulative"
+        },
+        {
+            "id": "acord_predicat",
+            "saptamana": 5,
+            "nume_complet": "Acordul predicatului cu subiectul"
+        },
+        {
+            "id": "diateza_activa",
+            "saptamana": 6,
+            "nume_complet": "Diateza activă"
+        },
+        {
+            "id": "diateza_pasiva",
+            "saptamana": 6,
+            "nume_complet": "Diateza pasivă"
+        },
+        {
+            "id": "verbul_a_fi",
+            "saptamana": 6,
+            "nume_complet": "Verbul a fi: copulativ sau auxiliar"
+        },
+        {
+            "id": "pronume_reflexive",
+            "saptamana": 7,
+            "nume_complet": "Pronumele reflexive"
+        },
+        {
+            "id": "verbe_reflexive",
+            "saptamana": 7,
+            "nume_complet": "Verbele reflexive"
+        },
+        {
+            "id": "constructii_impersonale",
+            "saptamana": 8,
+            "nume_complet": "Construcțiile impersonale"
+        },
+        {
+            "id": "subiect_simplu",
+            "saptamana": 9,
+            "nume_complet": "Subiectul simplu"
+        },
+        {
+            "id": "subiect_multiplu",
+            "saptamana": 9,
+            "nume_complet": "Subiectul multiplu"
+        },
+        {
+            "id": "subiect_compus",
+            "saptamana": 9,
+            "nume_complet": "Subiectul compus"
+        },
+        {
+            "id": "atribut_adjectival",
+            "saptamana": 10,
+            "nume_complet": "Atributul adjectival"
+        },
+        {
+            "id": "atribut_substantival",
+            "saptamana": 10,
+            "nume_complet": "Atributul substantival"
+        },
+        {
+            "id": "atribut_pronominal",
+            "saptamana": 10,
+            "nume_complet": "Atributul pronominal"
+        },
+        {
+            "id": "atribut_verbal",
+            "saptamana": 10,
+            "nume_complet": "Atributul verbal"
+        },
+        {
+            "id": "atribut_genitival",
+            "saptamana": 10,
+            "nume_complet": "Atributul genitival"
+        },
+        {
+            "id": "apozitie",
+            "saptamana": 11,
+            "nume_complet": "Apoziția"
+        },
+        {
+            "id": "fraza",
+            "saptamana": 12,
+            "nume_complet": "Fraza"
+        },
+        {
+            "id": "coordonare",
+            "saptamana": 12,
+            "nume_complet": "Coordonarea"
+        },
+        {
+            "id": "conjunctii_coordonatoare",
+            "saptamana": 12,
+            "nume_complet": "Conjuncțiile coordonatoare"
+        },
+        {
+            "id": "subordonare",
+            "saptamana": 13,
+            "nume_complet": "Subordonarea"
+        },
+        {
+            "id": "conjunctii_subordonatoare",
+            "saptamana": 13,
+            "nume_complet": "Conjuncțiile subordonatoare"
+        },
+        {
+            "id": "atributiva",
+            "saptamana": 14,
+            "nume_complet": "Propoziția atributivă"
+        },
+        {
+            "id": "pronume_relativ",
+            "saptamana": 14,
+            "nume_complet": "Pronumele relative"
+        },
+        {
+            "id": "complement_direct",
+            "saptamana": 15,
+            "nume_complet": "Complementul direct"
+        },
+        {
+            "id": "complement_indirect",
+            "saptamana": 16,
+            "nume_complet": "Complementul indirect"
+        },
+        {
+            "id": "circumstantial_loc",
+            "saptamana": 17,
+            "nume_complet": "Circumstanțialul de loc"
+        },
+        {
+            "id": "circumstantial_timp",
+            "saptamana": 17,
+            "nume_complet": "Circumstanțialul de timp"
+        },
+        {
+            "id": "circumstantial_mod",
+            "saptamana": 17,
+            "nume_complet": "Circumstanțialul de mod"
+        },
+        {
+            "id": "circumstantial_cauza",
+            "saptamana": 17,
+            "nume_complet": "Circumstanțialul de cauză"
+        },
+        {
+            "id": "pronume_personal",
+            "saptamana": 18,
+            "nume_complet": "Pronumele personale"
+        },
+        {
+            "id": "pronume_posesiv",
+            "saptamana": 18,
+            "nume_complet": "Pronumele posesive"
+        },
+        {
+            "id": "pronume_demonstrativ",
+            "saptamana": 18,
+            "nume_complet": "Pronumele demonstrative"
+        },
+        {
+            "id": "pronume_nehotarat",
+            "saptamana": 18,
+            "nume_complet": "Pronumele nehotărâte"
+        },
+        {
+            "id": "numeral_cardinal",
+            "saptamana": 19,
+            "nume_complet": "Numeralul cardinal"
+        },
+        {
+            "id": "numeral_ordinal",
+            "saptamana": 19,
+            "nume_complet": "Numeralul ordinal"
+        },
+        {
+            "id": "numeral_fractionar",
+            "saptamana": 19,
+            "nume_complet": "Numeralul fracționar"
+        },
+        {
+            "id": "numeral_multiplicativ",
+            "saptamana": 19,
+            "nume_complet": "Numeralul multiplicativ"
+        },
+        {
+            "id": "adverb_mod",
+            "saptamana": 20,
+            "nume_complet": "Adverbul de mod"
+        },
+        {
+            "id": "adverb_timp",
+            "saptamana": 20,
+            "nume_complet": "Adverbul de timp"
+        },
+        {
+            "id": "adverb_loc",
+            "saptamana": 20,
+            "nume_complet": "Adverbul de loc"
+        },
+        {
+            "id": "locutiune_adverbiala",
+            "saptamana": 20,
+            "nume_complet": "Locuțiunea adverbială"
+        },
+        {
+            "id": "derivare_prefix",
+            "saptamana": 21,
+            "nume_complet": "Derivarea cu prefix"
+        },
+        {
+            "id": "derivare_sufix",
+            "saptamana": 21,
+            "nume_complet": "Derivarea cu sufix"
+        },
+        {
+            "id": "familie_lexicala",
+            "saptamana": 21,
+            "nume_complet": "Familia lexicală"
+        },
+        {
+            "id": "compunere",
+            "saptamana": 22,
+            "nume_complet": "Compunerea"
+        },
+        {
+            "id": "metafora",
+            "saptamana": 23,
+            "nume_complet": "Metafora"
+        },
+        {
+            "id": "personificare",
+            "saptamana": 23,
+            "nume_complet": "Personificarea"
+        },
+        {
+            "id": "comparatie",
+            "saptamana": 23,
+            "nume_complet": "Comparația"
+        },
+        {
+            "id": "epitet",
+            "saptamana": 23,
+            "nume_complet": "Epitetul"
+        },
+        {
+            "id": "hiperbola",
+            "saptamana": 23,
+            "nume_complet": "Hiperbola"
+        },
+        {
+            "id": "alegoria",
+            "saptamana": 23,
+            "nume_complet": "Alegoria"
+        },
+        {
+            "id": "text_argumentativ",
+            "saptamana": 24,
+            "nume_complet": "Textul argumentativ"
+        },
+        {
+            "id": "opinie",
+            "saptamana": 25,
+            "nume_complet": "Textul de opinie"
+        },
+        {
+            "id": "balada",
+            "saptamana": 26,
+            "nume_complet": "Balada populară"
+        },
+        {
+            "id": "roman",
+            "saptamana": 27,
+            "nume_complet": "Romanul"
+        }
+    ]
+}
