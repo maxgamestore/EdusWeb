@@ -159,9 +159,12 @@
         // ============================================================
         //  CONFIGURARE
         // ============================================================
-        // Local: lasă gol ('')
-        // GitHub Pages: pune URL-ul serverului (ex: 'https://karma-....ngrok-free.dev')
-        const SERVER_URL = '';
+        // Detectare automată: local vs GitHub Pages
+        const SERVER_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? 'http://localhost:9000'
+            : 'https://karma-prelaunch-obscure.ngrok-free.dev';
+
+        console.log('[EdusWeb] SERVER_URL =', SERVER_URL);
 
         // ============================================================
         //  LOGIN

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdusWeb — Test inițial</title>
+    <script src="config.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f0f2f8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 24px 28px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        .intrebare-card {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 16px;
+        }
+
+        .intrebare-numar {
+            font-size: 12px;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .intrebare-text {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .intrebare-text em {
+            color: #667eea;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-trimite {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 20px;
+            transition: opacity 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-trimite:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+        .btn-trimite:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        .rezultat-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #155724;
+            text-align: center;
+        }
+
+        .rezultat-box h2 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .rezultat-box .scor {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header">
+            <h1 id="titlu">📝 Test inițial — Română</h1>
+            <p>Acest test este <b>obligatoriu</b>. După ce îl termini, primești statisticile tale.</p>
+        </div>
+
+        <div class="info-box">
+            ⚠️ Nu poți sări peste acest test. Răspunde la toate întrebările cât poți de bine.
+        </div>
+
+        <div id="intrebari-container"></div>
+
+        <button class="btn-trimite" id="btn-trimite" onclick="trimiteTest()">
+            Trimite testul
+        </button>
+
+    </div>
+
+    <script>
+        const userJson = localStorage.getItem('edusweb_user');
+        if (!userJson) {
+            window.location.href = '/';
+        }
+        const user = JSON.parse(userJson);
+
+        const cale = window.location.pathname;
+        const materieKey = cale.split('/')[2] || 'romana';
+
+        // ============================================================
+        //  BANCA DE 200 DE ÎNTREBĂRI
+        // ============================================================
+        const BANCA_INTREBARI = [
+            // PARTE DE VORBIRE (40)
+            { id: 1, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"frumoasă"</em>?', raspuns: 'adjectiv' },
+            { id: 2, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"aleargă"</em>?', raspuns: 'verb' },
+            { id: 3, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"carte"</em>?', raspuns: 'substantiv' },
+            { id: 4, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"repede"</em>?', raspuns: 'adverb' },
+            { id: 5, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"acesta"</em>?', raspuns: 'pronume' },
+            { id: 6, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"doi"</em>?', raspuns: 'numeral' },
+            { id: 7, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"în"</em>?', raspuns: 'prepozitie' },
+            { id: 8, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"și"</em>?', raspuns: 'conjunctie' },
+            { id: 9, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"vai"</em>?', raspuns: 'interjectie' },
+            { id: 10, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"Andrei"</em>?', raspuns: 'substantiv propriu' },
+            { id: 11, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"frumusețe"</em>?', raspuns: 'substantiv' },
+            { id: 12, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"citește"</em>?', raspuns: 'verb' },
+            { id: 13, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"verde"</em>?', raspuns: 'adjectiv' },
+            { id: 14, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"bine"</em>?', raspuns: 'adverb' },
+            { id: 15, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"care"</em>?', raspuns: 'pronume' },
+            { id: 16, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"trei"</em>?', raspuns: 'numeral' },
+            { id: 17, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"pe"</em>?', raspuns: 'prepozitie' },
+            { id: 18, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"dar"</em>?', raspuns: 'conjunctie' },
+            { id: 19, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"ah"</em>?', raspuns: 'interjectie' },
+            { id: 20, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"București"</em>?', raspuns: 'substantiv propriu' },
+            { id: 21, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"copilărie"</em>?', raspuns: 'substantiv' },
+            { id: 22, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"merge"</em>?', raspuns: 'verb' },
+            { id: 23, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"înalt"</em>?', raspuns: 'adjectiv' },
+            { id: 24, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"acolo"</em>?', raspuns: 'adverb' },
+            { id: 25, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"acela"</em>?', raspuns: 'pronume' },
+            { id: 26, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"cinci"</em>?', raspuns: 'numeral' },
+            { id: 27, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"sub"</em>?', raspuns: 'prepozitie' },
+            { id: 28, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"sau"</em>?', raspuns: 'conjunctie' },
+            { id: 29, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"of"</em>?', raspuns: 'interjectie' },
+            { id: 30, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"Maria"</em>?', raspuns: 'substantiv propriu' },
+            { id: 31, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"floare"</em>?', raspuns: 'substantiv' },
+            { id: 32, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"scrie"</em>?', raspuns: 'verb' },
+            { id: 33, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"roșu"</em>?', raspuns: 'adjectiv' },
+            { id: 34, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"foarte"</em>?', raspuns: 'adverb' },
+            { id: 35, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"cineva"</em>?', raspuns: 'pronume' },
+            { id: 36, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"șapte"</em>?', raspuns: 'numeral' },
+            { id: 37, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"lângă"</em>?', raspuns: 'prepozitie' },
+            { id: 38, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"însă"</em>?', raspuns: 'conjunctie' },
+            { id: 39, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"hei"</em>?', raspuns: 'interjectie' },
+            { id: 40, categorie: 'parte_vorbire', text: 'Ce parte de vorbire este cuvântul <em>"România"</em>?', raspuns: 'substantiv propriu' },
+
+            // VERBE — MOD ȘI TIMP (40)
+            { id: 41, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"citea"</em>?', raspuns: 'imperfect' },
+            { id: 42, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"a merge"</em>?', raspuns: 'infinitiv' },
+            { id: 43, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"a citit"</em>?', raspuns: 'perfect compus' },
+            { id: 44, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"cântase"</em>?', raspuns: 'mai mult ca perfect' },
+            { id: 45, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"să citească"</em>?', raspuns: 'conjunctiv' },
+            { id: 46, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citește!"</em>?', raspuns: 'imperativ' },
+            { id: 47, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"voi citi"</em>?', raspuns: 'viitor' },
+            { id: 48, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citind"</em>?', raspuns: 'gerunziu' },
+            { id: 49, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citit"</em> în "cartea citită"?', raspuns: 'participiu' },
+            { id: 50, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"citește"</em>?', raspuns: 'prezent' },
+            { id: 51, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"merse"</em>?', raspuns: 'perfect simplu' },
+            { id: 52, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"a fi citit"</em>?', raspuns: 'infinitiv' },
+            { id: 53, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"o să citesc"</em>?', raspuns: 'viitor' },
+            { id: 54, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citise"</em>?', raspuns: 'indicativ' },
+            { id: 55, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"să fi citit"</em>?', raspuns: 'conjunctiv' },
+            { id: 56, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"citesc"</em>?', raspuns: 'prezent' },
+            { id: 57, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citind"</em>?', raspuns: 'gerunziu' },
+            { id: 58, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"citii"</em>?', raspuns: 'perfect simplu' },
+            { id: 59, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"ar citi"</em>?', raspuns: 'condițional-optativ' },
+            { id: 60, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"aș citi"</em>?', raspuns: 'condițional-optativ prezent' },
+            { id: 61, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"aș fi citit"</em>?', raspuns: 'condițional-optativ' },
+            { id: 62, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citit-ai"</em>?', raspuns: 'participiu' },
+            { id: 63, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"citisem"</em>?', raspuns: 'mai mult ca perfect' },
+            { id: 64, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"să citesc"</em>?', raspuns: 'conjunctiv' },
+            { id: 65, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"voi fi citit"</em>?', raspuns: 'viitor anterior' },
+            { id: 66, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citind"</em> în "citind, am înțeles"?', raspuns: 'gerunziu' },
+            { id: 67, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"citeam"</em>?', raspuns: 'imperfect' },
+            { id: 68, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"a citi"</em>?', raspuns: 'infinitiv' },
+            { id: 69, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citește"</em> în "să citește"?', raspuns: 'conjunctiv' },
+            { id: 70, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"citirăm"</em>?', raspuns: 'perfect simplu' },
+            { id: 71, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"ai citi"</em>?', raspuns: 'infinitiv' },
+            { id: 72, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"am citit"</em>?', raspuns: 'perfect compus' },
+            { id: 73, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citind"</em> în "citind ziarul"?', raspuns: 'gerunziu' },
+            { id: 74, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"citiseră"</em>?', raspuns: 'mai mult ca perfect' },
+            { id: 75, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"să fi citit"</em>?', raspuns: 'conjunctiv' },
+            { id: 76, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"ar citi"</em>?', raspuns: 'condițional-optativ prezent' },
+            { id: 77, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"citit"</em> în "am citit"?', raspuns: 'participiu' },
+            { id: 78, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"e să citesc"</em>?', raspuns: 'viitor' },
+            { id: 79, categorie: 'verbe_mod_timp', text: 'Ce mod are verbul <em>"cititul"</em>?', raspuns: 'infinitiv' },
+            { id: 80, categorie: 'verbe_mod_timp', text: 'Ce timp are verbul <em>"citesc"</em>?', raspuns: 'prezent' },
+
+            // SUBSTANTIVE — GEN/NUMĂR/CAZ (40)
+            { id: 81, categorie: 'substantive', text: 'Ce gen are substantivul <em>"carte"</em>?', raspuns: 'feminin' },
+            { id: 82, categorie: 'substantive', text: 'Ce număr are substantivul <em>"copiii"</em>?', raspuns: 'plural' },
+            { id: 83, categorie: 'substantive', text: 'Ce gen are substantivul <em>"scaun"</em>?', raspuns: 'neutru' },
+            { id: 84, categorie: 'substantive', text: 'Ce gen are substantivul <em>"băiat"</em>?', raspuns: 'masculin' },
+            { id: 85, categorie: 'substantive', text: 'Ce număr are substantivul <em>"fata"</em>?', raspuns: 'singular' },
+            { id: 86, categorie: 'substantive', text: 'Ce caz are substantivul <em>"fetei"</em>?', raspuns: 'genitiv' },
+            { id: 87, categorie: 'substantive', text: 'Ce caz are substantivul <em>"copilului"</em>?', raspuns: 'dativ' },
+            { id: 88, categorie: 'substantive', text: 'Ce gen are substantivul <em>"tablou"</em>?', raspuns: 'neutru' },
+            { id: 89, categorie: 'substantive', text: 'Ce număr are substantivul <em>"munți"</em>?', raspuns: 'plural' },
+            { id: 90, categorie: 'substantive', text: 'Ce caz are substantivul <em>"om"</em> când e subiect?', raspuns: 'nominativ' },
+            { id: 91, categorie: 'substantive', text: 'Ce gen are substantivul <em>"masă"</em>?', raspuns: 'feminin' },
+            { id: 92, categorie: 'substantive', text: 'Ce gen are substantivul <em>"fluture"</em>?', raspuns: 'masculin' },
+            { id: 93, categorie: 'substantive', text: 'Ce gen are substantivul <em>"oraș"</em>?', raspuns: 'neutru' },
+            { id: 94, categorie: 'substantive', text: 'Ce număr are substantivul <em>"flori"</em>?', raspuns: 'plural' },
+            { id: 95, categorie: 'substantive', text: 'Ce caz are substantivul <em>"casei"</em>?', raspuns: 'genitiv' },
+            { id: 96, categorie: 'substantive', text: 'Ce caz are substantivul <em>"elevului"</em>?', raspuns: 'dativ' },
+            { id: 97, categorie: 'substantive', text: 'Ce gen are substantivul <em>"prietenie"</em>?', raspuns: 'feminin' },
+            { id: 98, categorie: 'substantive', text: 'Ce gen are substantivul <em>"picior"</em>?', raspuns: 'neutru' },
+            { id: 99, categorie: 'substantive', text: 'Ce număr are substantivul <em>"casă"</em>?', raspuns: 'singular' },
+            { id: 100, categorie: 'substantive', text: 'Ce caz are substantivul <em>"profesorul"</em> când e subiect?', raspuns: 'nominativ' },
+            { id: 101, categorie: 'substantive', text: 'Ce gen are substantivul <em>"mamă"</em>?', raspuns: 'feminin' },
+            { id: 102, categorie: 'substantive', text: 'Ce gen are substantivul <em>"tată"</em>?', raspuns: 'masculin' },
+            { id: 103, categorie: 'substantive', text: 'Ce gen are substantivul <em>"câmp"</em>?', raspuns: 'neutru' },
+            { id: 104, categorie: 'substantive', text: 'Ce număr are substantivul <em>"părinți"</em>?', raspuns: 'plural' },
+            { id: 105, categorie: 'substantive', text: 'Ce caz are substantivul <em>"mamei"</em>?', raspuns: 'genitiv' },
+            { id: 106, categorie: 'substantive', text: 'Ce caz are substantivul <em>"băiatului"</em>?', raspuns: 'dativ' },
+            { id: 107, categorie: 'substantive', text: 'Ce gen are substantivul <em>"dragoste"</em>?', raspuns: 'feminin' },
+            { id: 108, categorie: 'substantive', text: 'Ce gen are substantivul <em>"cântec"</em>?', raspuns: 'neutru' },
+            { id: 109, categorie: 'substantive', text: 'Ce număr are substantivul <em>"munte"</em>?', raspuns: 'singular' },
+            { id: 110, categorie: 'substantive', text: 'Ce caz are substantivul <em>"elevii"</em> când e subiect?', raspuns: 'nominativ' },
+            { id: 111, categorie: 'substantive', text: 'Ce gen are substantivul <em>"grădina"</em>?', raspuns: 'feminin' },
+            { id: 112, categorie: 'substantive', text: 'Ce gen are substantivul <em>"lup"</em>?', raspuns: 'masculin' },
+            { id: 113, categorie: 'substantive', text: 'Ce gen are substantivul <em>"sat"</em>?', raspuns: 'neutru' },
+            { id: 114, categorie: 'substantive', text: 'Ce număr are substantivul <em>"orașe"</em>?', raspuns: 'plural' },
+            { id: 115, categorie: 'substantive', text: 'Ce caz are substantivul <em>"bunicii"</em>?', raspuns: 'genitiv' },
+            { id: 116, categorie: 'substantive', text: 'Ce caz are substantivul <em>"fratelui"</em>?', raspuns: 'dativ' },
+            { id: 117, categorie: 'substantive', text: 'Ce gen are substantivul <em>"prietenă"</em>?', raspuns: 'feminin' },
+            { id: 118, categorie: 'substantive', text: 'Ce gen are substantivul <em>"nor"</em>?', raspuns: 'masculin' },
+            { id: 119, categorie: 'substantive', text: 'Ce gen are substantivul <em>"drum"</em>?', raspuns: 'neutru' },
+            { id: 120, categorie: 'substantive', text: 'Ce număr are substantivul <em>"case"</em>?', raspuns: 'plural' },
+
+            // ADJECTIVE — GEN/NUMĂR/GRAD (40)
+            { id: 121, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"frumoasă"</em>?', raspuns: 'feminin' },
+            { id: 122, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"veseli"</em>?', raspuns: 'plural' },
+            { id: 123, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"înalt"</em>?', raspuns: 'masculin' },
+            { id: 124, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"bună"</em>?', raspuns: 'singular' },
+            { id: 125, categorie: 'adjective', text: 'Ce grad de comparație are <em>"mai frumos"</em>?', raspuns: 'comparativ' },
+            { id: 126, categorie: 'adjective', text: 'Ce grad de comparație are <em>"foarte bun"</em>?', raspuns: 'superlativ relativ' },
+            { id: 127, categorie: 'adjective', text: 'Ce grad de comparație are <em>"cel mai bun"</em>?', raspuns: 'superlativ relativ' },
+            { id: 128, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"roșii"</em>?', raspuns: 'feminin' },
+            { id: 129, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"verde"</em>?', raspuns: 'singular' },
+            { id: 130, categorie: 'adjective', text: 'Ce parte de propoziție devine adjectivul lângă substantiv?', raspuns: 'atribut' },
+            { id: 131, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"caldă"</em>?', raspuns: 'feminin' },
+            { id: 132, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"repede"</em>?', raspuns: 'singular' },
+            { id: 133, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"lung"</em>?', raspuns: 'masculin' },
+            { id: 134, categorie: 'adjective', text: 'Ce grad de comparație are <em>"bun"</em>?', raspuns: 'pozitiv' },
+            { id: 135, categorie: 'adjective', text: 'Ce grad de comparație are <em>"la fel de bun"</em>?', raspuns: 'comparativ de egalitate' },
+            { id: 136, categorie: 'adjective', text: 'Ce grad de comparație are <em>"mai puțin bun"</em>?', raspuns: 'comparativ de inferioritate' },
+            { id: 137, categorie: 'adjective', text: 'Ce grad de comparație are <em>"extrem de bun"</em>?', raspuns: 'superlativ absolut' },
+            { id: 138, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"scumpă"</em>?', raspuns: 'feminin' },
+            { id: 139, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"scumpe"</em>?', raspuns: 'plural' },
+            { id: 140, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"greu"</em>?', raspuns: 'masculin' },
+            { id: 141, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"ușoară"</em>?', raspuns: 'feminin' },
+            { id: 142, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"lungi"</em>?', raspuns: 'plural' },
+            { id: 143, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"curat"</em>?', raspuns: 'masculin' },
+            { id: 144, categorie: 'adjective', text: 'Ce grad de comparație are <em>"cel mai înalt"</em>?', raspuns: 'superlativ relativ' },
+            { id: 145, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"curată"</em>?', raspuns: 'feminin' },
+            { id: 146, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"curate"</em>?', raspuns: 'plural' },
+            { id: 147, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"bătrână"</em>?', raspuns: 'feminin' },
+            { id: 148, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"tânăr"</em>?', raspuns: 'masculin' },
+            { id: 149, categorie: 'adjective', text: 'Ce grad de comparație are <em>"foarte frumos"</em>?', raspuns: 'superlativ absolut' },
+            { id: 150, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"nouă"</em>?', raspuns: 'feminin' },
+            { id: 151, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"noi"</em>?', raspuns: 'plural' },
+            { id: 152, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"vechi"</em>?', raspuns: 'masculin' },
+            { id: 153, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"veche"</em>?', raspuns: 'feminin' },
+            { id: 154, categorie: 'adjective', text: 'Ce grad de comparație are <em>"minunat"</em>?', raspuns: 'pozitiv' },
+            { id: 155, categorie: 'adjective', text: 'Ce grad de comparație are <em>"minunat de bun"</em>?', raspuns: 'superlativ absolut' },
+            { id: 156, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"senină"</em>?', raspuns: 'feminin' },
+            { id: 157, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"senin"</em>?', raspuns: 'singular' },
+            { id: 158, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"adânc"</em>?', raspuns: 'masculin' },
+            { id: 159, categorie: 'adjective', text: 'Ce gen are adjectivul <em>"adâncă"</em>?', raspuns: 'feminin' },
+            { id: 160, categorie: 'adjective', text: 'Ce număr are adjectivul <em>"adânci"</em>?', raspuns: 'plural' },
+
+            // FIGURI DE STIL (40)
+            { id: 161, categorie: 'figuri_stil', text: 'În expresia <em>"luna zâmbește"</em>, ce figură de stil este?', raspuns: 'personificare' },
+            { id: 162, categorie: 'figuri_stil', text: 'În expresia <em>"alb ca zăpada"</em>, ce figură de stil este?', raspuns: 'comparatie' },
+            { id: 163, categorie: 'figuri_stil', text: 'În expresia <em>"aureola soarelui"</em>, ce figură de stil este?', raspuns: 'metafora' },
+            { id: 164, categorie: 'figuri_stil', text: 'În expresia <em>"ochi de înger"</em>, ce figură de stil este?', raspuns: 'metafora' },
+            { id: 165, categorie: 'figuri_stil', text: 'În expresia <em>"iarba tremură"</em>, ce figură de stil este?', raspuns: 'personificare' },
+            { id: 166, categorie: 'figuri_stil', text: 'În expresia <em>"iute ca fulgerul"</em>, ce figură de stil este?', raspuns: 'comparatie' },
+            { id: 167, categorie: 'figuri_stil', text: 'În expresia <em>"munți de probleme"</em>, ce figură de stil este?', raspuns: 'hiperbola' },
+            { id: 168, categorie: 'figuri_stil', text: 'În expresia <em>"un ger cumplit"</em>, ce figură de stil este?', raspuns: 'epitet' },
+            { id: 169, categorie: 'figuri_stil', text: 'În expresia <em>"vântul zbiară"</em>, ce figură de stil este?', raspuns: 'personificare' },
+            { id: 170, categorie: 'figuri_stil', text: 'În expresia <em>"are un munte de curaj"</em>, ce figură de stil este?', raspuns: 'hiperbola' },
+            { id: 171, categorie: 'figuri_stil', text: 'În expresia <em>"ochi de cer"</em>, ce figură de stil este?', raspuns: 'metafora' },
+            { id: 172, categorie: 'figuri_stil', text: 'În expresia <em>"albă ca neaua"</em>, ce figură de stil este?', raspuns: 'comparatie' },
+            { id: 173, categorie: 'figuri_stil', text: 'În expresia <em>"copacii plâng"</em>, ce figură de stil este?', raspuns: 'personificare' },
+            { id: 174, categorie: 'figuri_stil', text: 'În expresia <em>"un vânt nebun"</em>, ce figură de stil este?', raspuns: 'epitet' },
+            { id: 175, categorie: 'figuri_stil', text: 'În expresia <em>"o mie de ani"</em>, ce figură de stil este?', raspuns: 'hiperbola' },
+            { id: 176, categorie: 'figuri_stil', text: 'În expresia <em>"inima de piatră"</em>, ce figură de stil este?', raspuns: 'metafora' },
+            { id: 177, categorie: 'figuri_stil', text: 'În expresia <em>"frumos ca un înger"</em>, ce figură de stil este?', raspuns: 'comparatie' },
+            { id: 178, categorie: 'figuri_stil', text: 'În expresia <em>"florile râd"</em>, ce figură de stil este?', raspuns: 'personificare' },
+            { id: 179, categorie: 'figuri_stil', text: 'În expresia <em>"un cer blând"</em>, ce figură de stil este?', raspuns: 'epitet' },
+            { id: 180, categorie: 'figuri_stil', text: 'În expresia <em>"versuri de aur"</em>, ce figură de stil este?', raspuns: 'metafora' },
+            { id: 181, categorie: 'figuri_stil', text: 'În expresia <em>"iute ca vântul"</em>, ce figură de stil este?', raspuns: 'comparatie' },
+            { id: 182, categorie: 'figuri_stil', text: 'În expresia <em>"stelele clipesc"</em>, ce figură de stil este?', raspuns: 'personificare' },
+            { id: 183, categorie: 'figuri_stil', text: 'În expresia <em>"un glas dulce"</em>, ce figură de stil este?', raspuns: 'epitet' },
+            { id: 184, categorie: 'figuri_stil', text: 'În expresia <em>"lacrimi de sânge"</em>, ce figură de stil este?', raspuns: 'metafora' },
+            { id: 185, categorie: 'figuri_stil', text: 'În expresia <em>"ușor ca fulgul"</em>, ce figură de stil este?', raspuns: 'comparatie' },
+            { id: 186, categorie: 'figuri_stil', text: 'În expresia <em>"pădurea șoptește"</em>, ce figură de stil este?', raspuns: 'personificare' },
+            { id: 187, categorie: 'figuri_stil', text: 'În expresia <em>"un suflet curat"</em>, ce figură de stil este?', raspuns: 'epitet' },
+            { id: 188, categorie: 'figuri_stil', text: 'În expresia <em>"a plâns un ocean"</em>, ce figură de stil este?', raspuns: 'hiperbola' },
+            { id: 189, categorie: 'figuri_stil', text: 'În expresia <em>"viața e un vis"</em>, ce figură de stil este?', raspuns: 'metafora' },
+            { id: 190, categorie: 'figuri_stil', text: 'În expresia <em>"alb ca laptele"</em>, ce figură de stil este?', raspuns: 'comparatie' },
+            { id: 191, categorie: 'figuri_stil', text: 'În expresia <em>"vântul suspină"</em>, ce figură de stil este?', raspuns: 'personificare' },
+            { id: 192, categorie: 'figuri_stil', text: 'În expresia <em>"un zâmbet amar"</em>, ce figură de stil este?', raspuns: 'epitet' },
+            { id: 193, categorie: 'figuri_stil', text: 'În expresia <em>"o veșnicie de așteptare"</em>, ce figură de stil este?', raspuns: 'hiperbola' },
+            { id: 194, categorie: 'figuri_stil', text: 'În expresia <em>"ochi de lumină"</em>, ce figură de stil este?', raspuns: 'metafora' },
+            { id: 195, categorie: 'figuri_stil', text: 'În expresia <em>"rece ca gheața"</em>, ce figură de stil este?', raspuns: 'comparatie' },
+            { id: 196, categorie: 'figuri_stil', text: 'În expresia <em>"munții dorm"</em>, ce figură de stil este?', raspuns: 'personificare' },
+            { id: 197, categorie: 'figuri_stil', text: 'În expresia <em>"un cântec duios"</em>, ce figură de stil este?', raspuns: 'epitet' },
+            { id: 198, categorie: 'figuri_stil', text: 'În expresia <em>"o lume de lacrimi"</em>, ce figură de stil este?', raspuns: 'hiperbola' },
+            { id: 199, categorie: 'figuri_stil', text: 'În expresia <em>"flori de cuvânt"</em>, ce figură de stil este?', raspuns: 'metafora' },
+            { id: 200, categorie: 'figuri_stil', text: 'În expresia <em>"dulce ca mierea"</em>, ce figură de stil este?', raspuns: 'comparatie' }
+        ];
+
+        function alegeRandom() {
+            const categorii = ['parte_vorbire', 'verbe_mod_timp', 'substantive', 'adjective', 'figuri_stil'];
+            const selectate = [];
+
+            for (const cat of categorii) {
+                const dinCategorie = BANCA_INTREBARI.filter(q => q.categorie === cat);
+                for (let i = dinCategorie.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [dinCategorie[i], dinCategorie[j]] = [dinCategorie[j], dinCategorie[i]];
+                }
+                selectate.push(...dinCategorie.slice(0, 10));
+            }
+
+            for (let i = selectate.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [selectate[i], selectate[j]] = [selectate[j], selectate[i]];
+            }
+
+            return selectate;
+        }
+
+        const INTREBARI = alegeRandom();
+
+        function render() {
+            const numeMaterie = materieKey === 'romana' ? 'Română' :
+                materieKey === 'mate' ? 'Mate' :
+                    'Java';
+            document.getElementById('titlu').textContent = `📝 Test inițial — ${numeMaterie}`;
+
+            const container = document.getElementById('intrebari-container');
+            container.innerHTML = INTREBARI.map((q, i) => `
+        <div class="intrebare-card">
+          <div class="intrebare-numar">Întrebarea ${i + 1} din ${INTREBARI.length}</div>
+          <div class="intrebare-text">${q.text}</div>
+          <input type="text" id="raspuns-${q.id}" placeholder="Scrie răspunsul aici..." autocomplete="off" />
+        </div>
+      `).join('');
+        }
+
+        function normalize(s) {
+            return String(s || '')
+                .toLowerCase()
+                .replace(/[ăâ]/g, 'a')
+                .replace(/î/g, 'i')
+                .replace(/ș/g, 's')
+                .replace(/ț/g, 't')
+                .replace(/[.,!?;:()„"«»\-—…]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function levenshtein(a, b) {
+            a = a || '';
+            b = b || '';
+            if (a.length === 0) return b.length;
+            if (b.length === 0) return a.length;
+
+            const matrice = [];
+            for (let i = 0; i <= b.length; i++) matrice[i] = [i];
+            for (let j = 0; j <= a.length; j++) matrice[0][j] = j;
+
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                        matrice[i][j] = matrice[i - 1][j - 1];
+                    } else {
+                        matrice[i][j] = Math.min(
+                            matrice[i - 1][j - 1] + 1,
+                            matrice[i][j - 1] + 1,
+                            matrice[i - 1][j] + 1
+                        );
+                    }
+                }
+            }
+            return matrice[b.length][a.length];
+        }
+
+        function esteCorect(raspunsElev, raspunsCorect) {
+            const a = normalize(raspunsElev);
+            const b = normalize(raspunsCorect);
+
+            if (a === b) return true;
+            if (!a) return false;
+
+            const dist = levenshtein(a, b);
+            return dist <= 2;
+        }
+
+        async function trimiteTest() {
+            const btn = document.getElementById('btn-trimite');
+            btn.disabled = true;
+            btn.textContent = 'Se corectează...';
+
+            const raspunsuri = {};
+            for (const q of INTREBARI) {
+                raspunsuri[q.id] = document.getElementById(`raspuns-${q.id}`).value;
+            }
+
+            const scoruri = {};
+            for (const q of INTREBARI) {
+                if (!scoruri[q.categorie]) {
+                    scoruri[q.categorie] = { corecte: 0, total: 0 };
+                }
+                scoruri[q.categorie].total++;
+
+                if (esteCorect(raspunsuri[q.id], q.raspuns)) {
+                    scoruri[q.categorie].corecte++;
+                }
+            }
+
+            try {
+                const res = await fetch(`${window.EDUSWEB_API}/calibrare`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: user.id,
+                        materie: materieKey,
+                        scoruri: scoruri
+                    })
+                });
+
+                const data = await res.json();
+                if (!data.ok) throw new Error(data.eroare || 'Eroare la salvare');
+
+                let totalCorecte = 0;
+                for (const cat in scoruri) totalCorecte += scoruri[cat].corecte;
+                const totalIntrebari = INTREBARI.length;
+                const procentTotal = Math.round((totalCorecte / totalIntrebari) * 100);
+
+                afiseazaRezultat(totalCorecte, totalIntrebari, procentTotal);
+
+            } catch (err) {
+                alert('Eroare: ' + err.message);
+                btn.disabled = false;
+                btn.textContent = 'Trimite testul';
+            }
+        }
+
+        function afiseazaRezultat(corecte, total, procent) {
+            document.body.innerHTML = `
+        <div class="container">
+          <div class="header" style="background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);">
+            <h1>✅ Test finalizat!</h1>
+            <p>Rezultatul tău a fost înregistrat.</p>
+          </div>
+
+          <div class="rezultat-box">
+            <h2>Scorul tău</h2>
+            <div class="scor">${corecte} / ${total}</div>
+            <p style="font-size: 18px; font-weight: 600;">${procent}%</p>
+          </div>
+
+          <p style="text-align: center; color: #666; margin-top: 20px;">
+            Vei fi redirecționat către pagina materiei...
+          </p>
+        </div>
+      `;
+
+            setTimeout(() => {
+                window.location.href = `/materie/${materieKey}`;
+            }, 3000);
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

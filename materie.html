@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EdusWeb — Română</title>
+    <script src="config.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -266,12 +267,9 @@
         }
         const user = JSON.parse(userJson);
 
-        // ============================================================
-        //  VERIFICĂ TESTUL INIȚIAL
-        // ============================================================
         async function verifica() {
             try {
-                const res = await fetch(`/statistici?userId=${user.id}&materie=romana`);
+                const res = await fetch(`${window.EDUSWEB_API}/statistici?userId=${user.id}&materie=romana`);
                 const data = await res.json();
 
                 if (!data.ok) {
@@ -321,7 +319,7 @@
 
         async function incarcaStreak() {
             try {
-                const res = await fetch(`/api/exercitii?userId=${user.id}`);
+                const res = await fetch(`${window.EDUSWEB_API}/api/exercitii?userId=${user.id}`);
                 const data = await res.json();
                 if (data.ok) {
                     document.getElementById('streak-val').textContent = data.streak || 0;

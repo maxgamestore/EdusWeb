@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EdusWeb — Lecții Română</title>
+    <script src="config.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -185,7 +186,6 @@
             background: #ccc;
         }
 
-        /* MODAL */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -330,7 +330,7 @@
 
         async function incarca() {
             try {
-                const res = await fetch(`/api/lectii?materie=romana&userId=${user.id}`);
+                const res = await fetch(`${window.EDUSWEB_API}/api/lectii?materie=romana&userId=${user.id}`);
                 const data = await res.json();
                 if (!data.ok) throw new Error(data.eroare || 'Eroare server');
 
@@ -343,9 +343,6 @@
             }
         }
 
-        // ============================================================
-        //  FALLBACK: dacă lipsește disponibil, presupunem toate = usor
-        // ============================================================
         function getDisponibil(lectie) {
             if (lectie && lectie.disponibil) return lectie.disponibil;
             return {

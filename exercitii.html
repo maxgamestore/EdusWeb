@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EdusWeb — Exerciții</title>
+    <script src="config.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -64,7 +65,6 @@
             font-size: 13px;
             font-weight: 600;
             font-family: inherit;
-            transition: background 0.2s;
         }
 
         .btn-toggle:hover {
@@ -94,7 +94,6 @@
             opacity: 0.9;
         }
 
-        /* MOD 1: una câte una */
         .ex-card {
             background: white;
             border-radius: 14px;
@@ -223,7 +222,6 @@
             border-left: 4px solid #e74c3c;
         }
 
-        /* MOD 2: grid */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -288,7 +286,6 @@
             margin-bottom: 4px;
         }
 
-        /* Modal refacere */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -375,7 +372,6 @@
         </div>
     </div>
 
-    <!-- Modal refacere întrebare -->
     <div class="modal-overlay" id="modal-refacere">
         <div class="modal">
             <h2>Vrei să refaci această întrebare?</h2>
@@ -394,7 +390,7 @@
 
         let toateExercitiile = [];
         let indexCurent = 0;
-        let raspunsuri = {};       // { idEx: { raspuns, corect } }
+        let raspunsuri = {};
         let raspunsSelectat = null;
         let feedbackAfisat = false;
         let modGrid = false;
@@ -407,9 +403,6 @@
         const saptamana = matchLectie ? parseInt(matchLectie[1]) : null;
         const esteLectie = saptamana !== null;
 
-        // ============================================================
-        //  ÎNCĂRCARE
-        // ============================================================
         async function incarca() {
             const container = document.getElementById('exercitii-container');
             try {
@@ -419,7 +412,7 @@
                 } else {
                     url = `/api/exercitii-zilnice?userId=${user.id}`;
                 }
-                const res = await fetch(url);
+                const res = await fetch(`${window.EDUSWEB_API}${url}`);
                 const data = await res.json();
                 if (!data.ok) throw new Error(data.eroare);
 
@@ -439,9 +432,6 @@
             }
         }
 
-        // ============================================================
-        //  TOGGLE MOD
-        // ============================================================
         function toggleVizualizare() {
             modGrid = !modGrid;
             const btn = document.getElementById('btn-toggle');
@@ -455,9 +445,6 @@
             }
         }
 
-        // ============================================================
-        //  MOD 1: UNA CÂTE UNA
-        // ============================================================
         function afiseazaExercitiu() {
             feedbackAfisat = false;
             raspunsSelectat = null;
@@ -473,7 +460,6 @@
         <div class="ex-intrebare">${ex.intrebare}</div>
       `;
 
-            // Dacă a fost deja răspuns, arată-l
             const raspunsExistent = raspunsuri[ex.id];
 
             if (ex.tip === 'multiple_choice') {
@@ -530,7 +516,6 @@
             feedback.id = 'feedback-box';
             card.appendChild(feedback);
 
-            // Dacă avem deja răspuns, arată feedback-ul
             if (raspunsExistent) {
                 const fb = feedback;
                 if (raspunsExistent.corect) {
@@ -542,7 +527,6 @@
                 }
                 feedbackAfisat = true;
 
-                // Adaugă buton refacere + următorul
                 const actiuniDiv = document.createElement('div');
                 actiuniDiv.style.display = 'flex';
                 actiuniDiv.style.gap = '10px';
@@ -577,7 +561,7 @@
             const feedbackBox = document.getElementById('feedback-box');
 
             try {
-                const res = await fetch('/api/exercitii/verifica', {
+                const res = await fetch(`${window.EDUSWEB_API}/api/exercitii/verifica`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ exercitiu: ex, raspuns: raspunsSelectat })
@@ -596,7 +580,6 @@
                     feedbackBox.textContent = `❌ Greșit. Răspuns corect: ${ex.raspuns_corect}`;
                 }
 
-                // Marchează variantele MC
                 if (ex.tip === 'multiple_choice') {
                     document.querySelectorAll('.varianta').forEach(b => {
                         b.disabled = true;
@@ -605,7 +588,6 @@
                     });
                 }
 
-                // Adaugă butoane refacere + următorul
                 const card = document.querySelector('.ex-card');
                 let actiuniDiv = card.querySelector('.actiuni-verificare');
                 if (!actiuniDiv) {
@@ -649,9 +631,6 @@
             }
         }
 
-        // ============================================================
-        //  MOD 2: GRID
-        // ============================================================
         function afiseazaGrid() {
             const container = document.getElementById('exercitii-container');
             container.innerHTML = '';
@@ -687,7 +666,6 @@
                     if (rasp) {
                         deschideModalRefacere(i);
                     } else {
-                        // Sari la întrebarea respectivă în modul normal
                         indexCurent = i;
                         modGrid = false;
                         document.getElementById('btn-toggle').textContent = '📋 Vezi toate';
@@ -725,7 +703,6 @@
 
             container.appendChild(grid);
 
-            // Dacă toate sunt făcute, adaugă buton finalizare
             if (Object.keys(raspunsuri).length === toateExercitiile.length) {
                 const btnFinal = document.createElement('button');
                 btnFinal.className = 'btn-actiune urmator';
@@ -735,9 +712,6 @@
             }
         }
 
-        // ============================================================
-        //  MODAL REFACERE
-        // ============================================================
         function deschideModalRefacere(index) {
             indexRefacere = index;
             const ex = toateExercitiile[index];
@@ -766,9 +740,6 @@
             }
         }
 
-        // ============================================================
-        //  FINALIZARE
-        // ============================================================
         async function finalizeaza() {
             const container = document.getElementById('exercitii-container');
 
@@ -779,10 +750,9 @@
             const total = toateExercitiile.length;
             const procent = Math.round((corecte / total) * 100);
 
-            // Trimite rezultatele finale
             try {
                 if (esteLectie) {
-                    await fetch('/api/exercitii/finalizeaza', {
+                    await fetch(`${window.EDUSWEB_API}/api/exercitii/finalizeaza`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -794,7 +764,7 @@
                         })
                     });
                 } else {
-                    await fetch('/api/exercitii/trimite', {
+                    await fetch(`${window.EDUSWEB_API}/api/exercitii/trimite`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -809,10 +779,9 @@
                 console.error('Eroare salvare:', err);
             }
 
-            // Reîncarcă streak-ul
             if (!esteLectie) {
                 try {
-                    const res = await fetch(`/api/exercitii-zilnice?userId=${user.id}`);
+                    const res = await fetch(`${window.EDUSWEB_API}/api/exercitii-zilnice?userId=${user.id}`);
                     const data = await res.json();
                     if (data.ok) document.getElementById('streak-val').textContent = data.streak;
                 } catch (err) { }
@@ -840,9 +809,6 @@
       `;
         }
 
-        // ============================================================
-        //  UTILITARE
-        // ============================================================
         function amesteca(arr) {
             const a = [...arr];
             for (let i = a.length - 1; i > 0; i--) {
